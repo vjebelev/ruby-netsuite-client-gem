@@ -1,0 +1,2 @@
+class NetsuiteException < StandardError
+end

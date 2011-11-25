@@ -1,0 +1,14 @@
+History.txt
+Manifest.txt
+README.rdoc
+Rakefile
+TODO
+lib/netsuite_client.rb
+lib/netsuite_client/client.rb
+lib/netsuite_client/netsuite_exception.rb
+lib/netsuite_client/netsuite_result.rb
+lib/netsuite_client/soap_netsuite.rb
+lib/netsuite_client/string.rb
+netsuite_client.gemspec
+test/test_helper.rb
+test/test_netsuite_client.rb

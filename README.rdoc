@@ -1,0 +1,55 @@
+= netsuite_client
+
+* http://rubygems.org/gems/netsuite_client
+
+== DESCRIPTION:
+
+Ruby soap4r-based Netsuite client. 
+
+== FEATURES/PROBLEMS:
+
+Provides a simple way to access Netsuite data, such as sales orders, inventory items, invoices etc. A valid Netsuite account and a certain familiarity with Netsuite record data types are required.
+
+Best to be used together with Rails Netsuite plugin which offers tighter integration with Active Record models and easier and more transparent access to netsuite data.
+
+
+== SYNOPSIS:
+
+  client = NetsuiteClient.new(:account_id => 1, :email => 'xxx@xxx.com', :password => 'password')
+  sales_order = client.find_by_internal_id('TransactionSearchBasic', 1)
+  
+
+== REQUIREMENTS:
+
+  * a working Netsuite account
+  * ruby 1.8.6/1.8.7
+  * soap4r
+
+== INSTALL:
+
+  gem install netsuite_client
+
+== LICENSE:
+
+(The MIT License)
+
+Copyright (c) 2010 Vlad Jebelev
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
