@@ -4,7 +4,7 @@ $:.unshift(File.dirname(__FILE__)) unless
 require 'rubygems'
 gem 'soap4r'
 
-DEFAULT_NS_WSDL_VERSION = '2011_1'
+DEFAULT_NS_WSDL_VERSION = '2011_2'
 if ENV['FORCE_NS_WSDL_VERSION'] 
   begin
     require "netsuite_client/soap_netsuite_#{ENV['FORCE_NS_WSDL_VERSION']}"
