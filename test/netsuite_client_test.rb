@@ -1,5 +1,4 @@
 require File.dirname(__FILE__) + '/test_helper.rb'
-require 'ruby-debug'
 
 class NetsuiteClientClient < Test::Unit::TestCase
   include NetSuite::SOAP
@@ -7,7 +6,6 @@ class NetsuiteClientClient < Test::Unit::TestCase
   def setup
     ENV['NS_ENDPOINT_URL'] ||= NetSuite::SOAP::NetSuitePortType::DefaultEndpointUrl.sub(/webservices/, "webservices.sandbox")
 
-    ENV['NS_PASSWORD'] = "LuxPortal!nt2011"
     unless ENV['NS_ACCOUNT_ID'] && ENV['NS_EMAIL'] && ENV['NS_PASSWORD'] 
       puts "Ensure that all your environment variables are set: NS_ACCOUNT_ID, NS_EMAIL, NS_PASSWORD"
       exit(-1)
@@ -16,7 +14,7 @@ class NetsuiteClientClient < Test::Unit::TestCase
     @client = NetsuiteClient.new(:account_id => ENV['NS_ACCOUNT_ID'], :email => ENV['NS_EMAIL'], :password => ENV['NS_PASSWORD'], :endpoint_url => ENV['NS_ENDPOINT_URL'])
     #@client.debug = true
   end
-  
+
   def test_init
     assert_not_nil @client
   end
@@ -39,6 +37,7 @@ class NetsuiteClientClient < Test::Unit::TestCase
     assert records.all? {|r| r.class.to_s == 'NetSuite::SOAP::Currency'}
   end
 
+# inventory item tests are currently disabled
 #  FIXME: 2011_2 requires cogs and asset accounts
 #  def test_add_inventory_item
 #    ref = InventoryItem.new
@@ -48,7 +47,8 @@ class NetsuiteClientClient < Test::Unit::TestCase
 #    assert res.success? || res.error_code == 'DUP_ITEM'
 #  end
 
-  # FIXME: find any item 
+
+# FIXME
 #  def test_find_by_item_id
 #    test_add_inventory_item
 #    item = @client.find_by('ItemSearchBasic', 'itemId', 'test inventory item')
@@ -59,6 +59,7 @@ class NetsuiteClientClient < Test::Unit::TestCase
 #    assert_equal 'NetSuite::SOAP::InventoryItem', item[0].class.to_s
 #  end
 
+# FIXME
 #  def test_update_inventory_item
 #    test_add_inventory_item
 #    new_name = String.random_string
@@ -77,6 +78,7 @@ class NetsuiteClientClient < Test::Unit::TestCase
 #    assert item.displayName == new_name
 #  end
 
+# FIXME
 #  def test_delete_inventory_item
 #    test_add_inventory_item
 #    item = @client.find_by('ItemSearchBasic', 'itemId', 'test inventory item')[0]
@@ -89,4 +91,5 @@ class NetsuiteClientClient < Test::Unit::TestCase
 #    assert res.success?
 #    assert_nil @client.find_by('ItemSearchBasic', 'itemId', 'test inventory item')[0]
 #  end
+
 end
