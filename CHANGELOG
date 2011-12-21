@@ -1,4 +1,8 @@
 
+=== 1.0.1 2011-12-21
+
+  * fixed scope of method full_basic_search (was private by mistake)
+
 === 1.0 2011-11-22
 
   * upgraded to latest WSDL: 2011_2 and made it default

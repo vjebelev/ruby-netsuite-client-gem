@@ -123,7 +123,6 @@ class NetsuiteClient
     NetsuiteResult.new(res.writeResponse)
   end
 
-  private
 
   # Get the full result set (possibly across multiple pages).
   def full_basic_search(basic)
@@ -141,6 +140,8 @@ class NetsuiteClient
 
     records
   end
+
+  private
 
   # Get the first page of search results for basic search.
   def exec_basic_search(basic)
