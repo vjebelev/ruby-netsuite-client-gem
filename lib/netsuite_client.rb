@@ -1,6 +1,9 @@
 $:.unshift(File.dirname(__FILE__)) unless
   $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
 
+require 'netsuite_client/string'
+require 'netsuite_client/symbol'
+
 require 'rubygems'
 gem 'soap4r'
 
@@ -16,7 +19,6 @@ else
   require "netsuite_client/soap_netsuite_#{DEFAULT_NS_WSDL_VERSION}"
 end
 
-require 'netsuite_client/string'
 require 'netsuite_client/netsuite_exception'
 require 'netsuite_client/netsuite_result'
 require 'netsuite_client/client'

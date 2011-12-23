@@ -1,4 +1,8 @@
 
+=== 1.1 2011-12-23
+
+  * made it work with ruby 1.9.2 (spews some warnings though)
+
 === 1.0.1 2011-12-21
 
   * fixed scope of method full_basic_search (was private by mistake)
