@@ -11,8 +11,8 @@ class NetsuiteClientClient < Test::Unit::TestCase
       exit(-1)
     end
 
-    @client = NetsuiteClient.new(:account_id => ENV['NS_ACCOUNT_ID'], :email => ENV['NS_EMAIL'], :password => ENV['NS_PASSWORD'], :endpoint_url => ENV['NS_ENDPOINT_URL'])
-    #@client.debug = true
+    @client = NetsuiteClient.new(:account_id => ENV['NS_ACCOUNT_ID'], :email => ENV['NS_EMAIL'], :password => ENV['NS_PASSWORD'], :role => ENV['NS_ROLE'], :endpoint_url => ENV['NS_ENDPOINT_URL'])
+    @client.debug = true
   end
 
   def test_init
