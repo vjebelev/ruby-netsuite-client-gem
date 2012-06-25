@@ -37,6 +37,12 @@ class NetsuiteClientClient < Test::Unit::TestCase
     assert records.all? {|r| r.class.to_s == 'NetSuite::SOAP::Currency'}
   end
 
+  def test_get_select_value
+    values = @client.get_select_value('RecordType::SupportCase', 'origin')
+    assert values.count > 0
+    assert values.find {|value| value.name == "Web"}
+  end
+
 # inventory item tests are currently disabled
 #  FIXME: 2011_2 requires cogs and asset accounts
 #  def test_add_inventory_item
