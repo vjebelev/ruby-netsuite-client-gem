@@ -21,5 +21,5 @@ Gem::Specification.new do |s|
   s.summary = %q{Ruby soap4r-based Netsuite client.}
   s.test_files = ["test/netsuite_client_test.rb", "test/test_helper.rb"]
 
-  s.add_dependency 'soap4r'
+  s.add_dependency 'soap4r-ruby1.9'
 end
