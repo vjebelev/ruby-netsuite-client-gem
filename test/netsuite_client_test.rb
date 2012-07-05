@@ -11,8 +11,8 @@ class NetsuiteClientClient < Test::Unit::TestCase
       exit(-1)
     end
 
-    @client = NetsuiteClient.new(:account_id => ENV['NS_ACCOUNT_ID'], :email => ENV['NS_EMAIL'], :password => ENV['NS_PASSWORD'], :endpoint_url => ENV['NS_ENDPOINT_URL'])
-    #@client.debug = true
+    @client = NetsuiteClient.new(:account_id => ENV['NS_ACCOUNT_ID'], :email => ENV['NS_EMAIL'], :password => ENV['NS_PASSWORD'], :role => ENV['NS_ROLE'], :endpoint_url => ENV['NS_ENDPOINT_URL'])
+    # @client.debug = true
   end
 
   def test_init
@@ -35,6 +35,21 @@ class NetsuiteClientClient < Test::Unit::TestCase
     records = @client.get_all('GetAllRecordType::Currency')
     assert records.any?
     assert records.all? {|r| r.class.to_s == 'NetSuite::SOAP::Currency'}
+  end
+
+  def test_get_select_value
+    values = @client.get_select_value('RecordType::SupportCase', 'origin')
+    assert values.count > 0
+    assert values.find {|value| value.name == "Web"}
+  end
+
+  def test_add
+    support_case = SupportCase.new
+    support_case.title           = 'title'
+    support_case.incomingMessage = 'description'
+    support_case.email           = 'test@example.com'
+    res = @client.add(support_case)
+    assert res.success?
   end
 
 # inventory item tests are currently disabled

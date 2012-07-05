@@ -37,7 +37,12 @@ class NetsuiteClient
     @config = config
 
     @driver = NetSuitePortType.new(@config[:endpoint_url] || NetSuitePortType::DefaultEndpointUrl)
-    @driver.headerhandler.add(PassportHeaderHandler.new(:email => @config[:email], :password => @config[:password], :account => @config[:account_id]))
+
+    if @config[:role]
+      role = {:internalID => config[:role]}
+    end
+
+    @driver.headerhandler.add(PassportHeaderHandler.new(:email => @config[:email], :password => @config[:password], :account => @config[:account_id], :role => role))
     @driver.headerhandler.add(PreferencesHeaderHandler.new)      
     @driver.headerhandler.add(SearchPreferencesHeaderHandler.new)
   end
@@ -123,6 +128,13 @@ class NetsuiteClient
     NetsuiteResult.new(res.writeResponse)
   end
 
+  def get_select_value(klass, field)
+    fieldDescription = GetSelectValueFieldDescription.new
+    fieldDescription.recordType = constantize(klass)
+    fieldDescription.field = field
+    res = @driver.getSelectValue(:fieldDescription => fieldDescription, :pageIndex => 1).getSelectValueResult
+    res.status.xmlattr_isSuccess ? res.baseRefList : nil
+  end
 
   # Get the full result set (possibly across multiple pages).
   def full_basic_search(basic)
