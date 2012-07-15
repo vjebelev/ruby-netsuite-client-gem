@@ -5,7 +5,7 @@ require 'netsuite_client/string'
 require 'netsuite_client/symbol'
 
 require 'rubygems'
-gem 'soap4r'
+gem 'soap4r-ruby1.9'
 
 DEFAULT_NS_WSDL_VERSION = '2011_2'
 if ENV['FORCE_NS_WSDL_VERSION'] 
