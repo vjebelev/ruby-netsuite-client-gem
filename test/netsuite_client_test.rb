@@ -43,13 +43,23 @@ class NetsuiteClientClient < Test::Unit::TestCase
     assert values.find {|value| value.name == "Web"}
   end
 
-  def test_add
-    support_case = SupportCase.new
-    support_case.title           = 'title'
-    support_case.incomingMessage = 'description'
-    support_case.email           = 'test@example.com'
-    res = @client.add(support_case)
+  def test_add_customer
+    customer = Customer.new
+    customer.companyName = "Test Inc."
+    res = @client.add(customer)
     assert res.success?
+  end
+
+  def test_delete_customer
+    item = @client.find_by('CustomerSearchBasic', 'companyName', 'Test Inc.')[0]
+    assert_not_nil item
+
+    ref = Customer.new
+    ref.xmlattr_internalId = item.xmlattr_internalId
+    res = @client.delete(ref)
+    assert_not_nil res
+    assert res.success?
+    assert_nil @client.find_by('CustomerSearchBasic', 'companyName', 'Test Inc.')[0]
   end
 
 # inventory item tests are currently disabled
