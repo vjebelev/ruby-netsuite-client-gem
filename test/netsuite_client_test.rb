@@ -20,7 +20,7 @@ class NetsuiteClientClient < Test::Unit::TestCase
   end
 
   def test_find_by_internal_id
-    records = @client.find_by_internal_ids('TransactionSearchBasic', [1])
+    records = @client.find_by_internal_ids('TransactionSearchBasic', [0])
     assert_equal [], records
   end
 
@@ -43,13 +43,37 @@ class NetsuiteClientClient < Test::Unit::TestCase
     assert values.find {|value| value.name == "Web"}
   end
 
-  def test_add
-    support_case = SupportCase.new
-    support_case.title           = 'title'
-    support_case.incomingMessage = 'description'
-    support_case.email           = 'test@example.com'
-    res = @client.add(support_case)
+  def test_basic_search_customer
+    search = CustomerSearchBasic.new
+    search.externalId = SearchMultiSelectField.new
+    search.externalId.xmlattr_operator = SearchMultiSelectFieldOperator::AnyOf
+    search.externalId.searchValue = RecordRef.new
+    search.externalId.searchValue.xmlattr_externalId = 'FINDMENOT'
+
+    customers = @client.full_basic_search(search)
+
+    assert customers.empty?
+  end
+
+  # NOTE: These tests are order dependent as only one customer can exist per
+  # unique name and the customer must exist to delete it.
+  def test_add_customer
+    customer = Customer.new
+    customer.companyName = "Test Inc."
+    res = @client.add(customer)
     assert res.success?
+  end
+
+  def test_delete_customer
+    item = @client.find_by('CustomerSearchBasic', 'companyName', 'Test Inc.')[0]
+    assert_not_nil item
+
+    ref = Customer.new
+    ref.xmlattr_internalId = item.xmlattr_internalId
+    res = @client.delete(ref)
+    assert_not_nil res
+    assert res.success?
+    assert_nil @client.find_by('CustomerSearchBasic', 'companyName', 'Test Inc.')[0]
   end
 
 # inventory item tests are currently disabled
