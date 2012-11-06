@@ -21,6 +21,7 @@ end
 
 require 'netsuite_client/netsuite_exception'
 require 'netsuite_client/netsuite_result'
+require 'netsuite_client/netsuite_result_list'
 require 'netsuite_client/client'
 
 class NetsuiteClient
