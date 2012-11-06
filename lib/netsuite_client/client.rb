@@ -39,7 +39,7 @@ class NetsuiteClient
     @driver = NetSuitePortType.new(@config[:endpoint_url] || NetSuitePortType::DefaultEndpointUrl)
 
     if @config[:role]
-      role = {:internalID => config[:role]}
+      role = {:xmlattr_internalId => config[:role]}
     end
 
     @driver.headerhandler.add(PassportHeaderHandler.new(:email => @config[:email], :password => @config[:password], :account => @config[:account_id], :role => role))
