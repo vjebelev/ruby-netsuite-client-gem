@@ -43,6 +43,20 @@ class NetsuiteClientClient < Test::Unit::TestCase
     assert values.find {|value| value.name == "Web"}
   end
 
+  def test_basic_search_customer
+    search = CustomerSearchBasic.new
+    search.externalId = SearchMultiSelectField.new
+    search.externalId.xmlattr_operator = SearchMultiSelectFieldOperator::AnyOf
+    search.externalId.searchValue = RecordRef.new
+    search.externalId.searchValue.xmlattr_externalId = 'FINDMENOT'
+
+    customers = @client.full_basic_search(search)
+
+    assert customers.empty?
+  end
+
+  # NOTE: These tests are order dependent as only one customer can exist per
+  # unique name and the customer must exist to delete it.
   def test_add_customer
     customer = Customer.new
     customer.companyName = "Test Inc."
