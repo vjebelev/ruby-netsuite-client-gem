@@ -20,7 +20,7 @@ class NetsuiteClientClient < Test::Unit::TestCase
   end
 
   def test_find_by_internal_id
-    records = @client.find_by_internal_ids('TransactionSearchBasic', [1])
+    records = @client.find_by_internal_ids('TransactionSearchBasic', [0])
     assert_equal [], records
   end
 
