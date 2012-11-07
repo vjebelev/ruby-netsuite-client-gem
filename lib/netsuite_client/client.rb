@@ -39,7 +39,7 @@ class NetsuiteClient
     @driver = NetSuitePortType.new(@config[:endpoint_url] || NetSuitePortType::DefaultEndpointUrl)
 
     if @config[:role]
-      role = {:internalID => config[:role]}
+      role = {:xmlattr_internalId => config[:role]}
     end
 
     @driver.headerhandler.add(PassportHeaderHandler.new(:email => @config[:email], :password => @config[:password], :account => @config[:account_id], :role => role))
@@ -119,6 +119,16 @@ class NetsuiteClient
     NetsuiteResult.new(res.writeResponse)
   end
 
+  def update_list(list)
+    res = @driver.updateList(UpdateListRequest.new(list))
+    NetsuiteResultList.new(res.writeResponseList)
+  end
+
+  def upsert(record)
+    res = @driver.upsert(UpsertRequest.new(record))
+    NetsuiteResult.new(res.writeResponse)
+  end
+
   def delete(ref)
     r = RecordRef.new
     r.xmlattr_type = ref.class.to_s.split('::').last.sub(/^(\w)/) {|s|$1.downcase}
@@ -136,34 +146,52 @@ class NetsuiteClient
     res.status.xmlattr_isSuccess ? res.baseRefList : nil
   end
 
+  def get_customization_id(type, include_inactives = false)
+    request = GetCustomizationIdRequest.new
+    request.customizationType = type
+    request.includeInactives  = include_inactives
+
+    res = @driver.getCustomizationId(request)
+
+    NetsuiteResult.new(res.getCustomizationIdResult)
+  end
+
   # Get the full result set (possibly across multiple pages).
   def full_basic_search(basic)
     records, res = exec_basic_search(basic)
-    unless res && res.status.xmlattr_isSuccess
-      return []
-    end
 
-    if res.totalPages > 1
-      while res.pageIndex < res.totalPages
-        next_records, res = exec_next_search(res.searchId, res.pageIndex+1)
-        records += next_records
-      end
-    end
+    fetch_remaining_records!(records, res)
+
+    records
+  end
+
+  def full_advanced_search(advanced)
+    records, res = exec_advanced_search(advanced)
+
+    fetch_remaining_records!(records, res)
 
     records
   end
 
   private
 
-  # Get the first page of search results for basic search.
-  def exec_basic_search(basic)
+  def exec_search(type, search_object)
     exec_with_retry do
-      search = constantize(basic.class.to_s.sub(/Basic/, '')).new
-      search.basic = basic
+      search = constantize(search_object.class.to_s.sub(/#{type}/, '')).new
+      search.basic = search_object
 
       res = @driver.search(search)
       return res.searchResult.recordList, res.searchResult
     end
+  end
+
+  # Get the first page of search results for basic search.
+  def exec_basic_search(search)
+    exec_search('Basic', search)
+  end
+
+  def exec_advanced_search(search)
+    exec_search('Advanced', search)
   end
 
   # Get the next page of results.
@@ -192,6 +220,19 @@ class NetsuiteClient
       end
 
       raise NetsuiteException.new(e)
+    end
+  end
+
+  def fetch_remaining_records!(records, res)
+    unless res && res.status.xmlattr_isSuccess
+      return []
+    end
+
+    if res.totalPages > 1
+      while res.pageIndex < res.totalPages
+        next_records, res = exec_next_search(res.searchId, res.pageIndex+1)
+        records += next_records
+      end
     end
   end
 

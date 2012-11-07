@@ -1,0 +1,2 @@
+class NetsuiteResultList < ::Array
+end
